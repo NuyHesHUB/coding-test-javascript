@@ -11,4 +11,4 @@ function solution(s){
     }
     return pCount === yCount;
 }
-console.log(solution("yyypypypyyp")); // 이 코드는 true 또는 false를 출력합니다.
+console.log(solution("yyypypypyyp"));
