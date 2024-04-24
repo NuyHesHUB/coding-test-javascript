@@ -1,7 +1,6 @@
 function solution(n) {
-    var answer = [];
-    return answer;
+    let str = n.toString().split('').map(Number);
+    return str.reverse();
 }
 
-console.log(solution(123));
-console.log(solution(987));
+console.log(solution(12345));
