@@ -16,3 +16,5 @@
 | 2024-04-26 | Lv.1 | 짝수와 홀수 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%EC%A7%9D%EC%88%98%EC%99%80%20%ED%99%80%EC%88%98) |
 | 2024-04-26 | Lv.1 | 평균 구하기 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%ED%8F%89%EA%B7%A0%20%EA%B5%AC%ED%95%98%EA%B8%B0) |
 | 2024-04-26 | Lv.1 | 하샤드 수 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%ED%95%98%EC%83%A4%EB%93%9C%20%EC%88%98) |
+| 2024-05-08 | Lv.1 | x만큼 간격이 있는 n개의 숫자 | [바로가기]() |
+| 2024-05-09 | Lv.1 | 나머지가 1이 되는 수 찾기 | [바로가기]() |
