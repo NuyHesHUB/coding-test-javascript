@@ -18,4 +18,5 @@
 | 2024-04-26 | Lv.1 | 하샤드 수 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%ED%95%98%EC%83%A4%EB%93%9C%20%EC%88%98) |
 | 2024-05-08 | Lv.1 | x만큼 간격이 있는 n개의 숫자 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/x%EB%A7%8C%ED%81%BC%20%EA%B0%84%EA%B2%A9%EC%9D%B4%20%EC%9E%88%EB%8A%94%20n%EA%B0%9C%EC%9D%98%20%EC%88%AB%EC%9E%90) |
 | 2024-05-09 | Lv.1 | 나머지가 1이 되는 수 찾기 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%EB%82%98%EB%A8%B8%EC%A7%80%EA%B0%80%201%EC%9D%B4%20%EB%90%98%EB%8A%94%20%EC%88%98%20%EC%B0%BE%EA%B8%B0) |
-| 2024-05-10 | Lv.1 | 두 정수 사이의 합 | [바로가기]() |
+| 2024-05-10 | Lv.1 | 두 정수 사이의 합 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%EB%91%90%20%EC%A0%95%EC%88%98%20%EC%82%AC%EC%9D%B4%EC%9D%98%20%ED%95%A9) |
+| 2024-05-10 | Lv.1 | 서울에서 김서방 찾기 | [바로가기]() |
