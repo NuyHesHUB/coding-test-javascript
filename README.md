@@ -21,4 +21,5 @@
 | 2024-05-10 | Lv.1 | 두 정수 사이의 합 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%EB%91%90%20%EC%A0%95%EC%88%98%20%EC%82%AC%EC%9D%B4%EC%9D%98%20%ED%95%A9) |
 | 2024-05-14 | Lv.1 | 서울에서 김서방 찾기 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%EC%84%9C%EC%9A%B8%EC%97%90%EC%84%9C%20%EA%B9%80%EC%84%9C%EB%B0%A9%20%EC%B0%BE%EA%B8%B0) |
 | 2024-05-23 | Lv.1 | 음양 더하기 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%EC%9D%8C%EC%96%91%20%EB%8D%94%ED%95%98%EA%B8%B0) |
-| 2024-06-25 | Lv.1 | 없는 숫자 더하기 | [바로가기]() |
+| 2024-06-25 | Lv.1 | 없는 숫자 더하기 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%EC%97%86%EB%8A%94%20%EC%88%AB%EC%9E%90%20%EB%8D%94%ED%95%98%EA%B8%B0) |
+| 2024-06-25 | Lv.1 | 콜라츠 추측 | [바로가기]() |
