@@ -23,4 +23,4 @@
 | 2024-05-23 | Lv.1 | 음양 더하기 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%EC%9D%8C%EC%96%91%20%EB%8D%94%ED%95%98%EA%B8%B0) |
 | 2024-06-25 | Lv.1 | 없는 숫자 더하기 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%EC%97%86%EB%8A%94%20%EC%88%AB%EC%9E%90%20%EB%8D%94%ED%95%98%EA%B8%B0) |
 | 2024-06-25 | Lv.1 | 콜라츠 추측 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%EC%BD%9C%EB%9D%BC%EC%A6%88%20%EC%B6%94%EC%B8%A1) |
-| 2024-06-26 | Lv.1 | 나누어 떨어지는 숫자 배열 | [바로가기]() |
+| 2024-06-26 | Lv.1 | 나누어 떨어지는 숫자 배열 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%EB%82%98%EB%88%84%EC%96%B4%20%EB%96%A8%EC%96%B4%EC%A7%80%EB%8A%94%20%EC%88%AB%EC%9E%90%20%EB%B0%B0%EC%97%B4) |
