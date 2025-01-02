@@ -3,5 +3,5 @@ function solution(a, b) {
     return answer;
 }
 
-console.log(solution());
+console.log(solution('1'));
 console.log(solution());
