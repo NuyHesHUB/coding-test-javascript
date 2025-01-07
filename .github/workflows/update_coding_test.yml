@@ -6,14 +6,14 @@ on:
       - main
 
   workflow_dispatch: # 수동 실행을 위한 이벤트 추가
-  
+
 jobs:
   update-coding-test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Configure Git
         run: |
@@ -43,16 +43,23 @@ jobs:
             echo "No commits found" > changed_files.txt
           fi
           cat changed_files.txt
+          echo "::set-output name=files::$(cat changed_files.txt)"
 
       - name: Run Python script
         run: |
-          python scripts/update_coding_test.py
-        env: 
-          CHANGED_FILES: ${{ steps.changed-files.outputs.files }}
+          CHANGED_FILES=$(cat changed_files.txt)
+          echo "Changed files: $CHANGED_FILES"
+          python scripts/update_coding_test.py "$CHANGED_FILES"
 
       - name: Pull and Push changes
         run: |
           git pull origin main --rebase
           git add .
-          git commit -m "Update coding test results"
-          git push https://${{ secrets.GH_PAT_COTE }}@github.com/NuyHesHUB/coding-test-javascript.git
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "Update coding test results"
+            git push https://x-access-token:${{ secrets.GH_PAT_COTE }}@github.com/NuyHesHUB/coding-test-javascript.git
+          else
+            echo "No changes to commit."
+            
+    outputs:
+        files: ${{ steps.changed-files.outputs.files }}
