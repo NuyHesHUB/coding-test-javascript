@@ -2,7 +2,7 @@ function solution(phone_number) {
     let phone = phone_number.split('');
 
     for(let i=0;i<phone.length-4;i++){
-        phone[i]='*';
+        phone[i]='*'
     }
 
     return phone.join('')
