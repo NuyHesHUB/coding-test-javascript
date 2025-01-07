@@ -5,15 +5,13 @@ on:
     branches:
       - main
 
-  workflow_dispatch: # 수동 실행을 위한 이벤트 추가
-
 jobs:
   update-coding-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Configure Git
         run: |
@@ -29,13 +27,33 @@ jobs:
         run: |
           pip install feedparser gitpython
 
+      - name: Get changed files
+        id: changed-files
+        run: |
+          commit_count=$(git rev-list --count HEAD)
+          if [ $commit_count -gt 0 ]; then
+            if [ $commit_count -gt 1 ]; then
+              git diff --name-only HEAD~1 HEAD > changed_files.txt
+            else
+              echo "Only one commit found" > changed_files.txt
+            fi
+          else
+            echo "No commits found" > changed_files.txt
+          fi
+          cat changed_files.txt
+          echo "::set-output name=files::$(cat changed_files.txt)"
+
       - name: Run Python script
         run: |
-          python scripts/update_coding_test.py
+          CHANGED_FILES=$(cat changed_files.txt)
+          echo "Changed files: $CHANGED_FILES"
+          python scripts/update_coding_test.py "$CHANGED_FILES"
 
       - name: Pull and Push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT_COTE }}
         run: |
           git pull origin main --rebase
           git add .
           git commit -m "Update coding test results" || echo "No changes to commit."
-          git push https://x-access-token:${{ secrets.GH_PAT_COTE }}@github.com/NuyHesHUB/coding-test-javascript.git || echo "No changes to push."
+          git push https://${{ secrets.GH_PAT_COTE }}@github.com/NuyHesHUB/coding-test-javascript.git || echo "No changes to push."
