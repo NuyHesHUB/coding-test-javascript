@@ -5,6 +5,8 @@ on:
     branches:
       - main
 
+  workflow_dispatch: # 수동 실행을 위한 이벤트 추가
+  
 jobs:
   update-coding-test:
     runs-on: ubuntu-latest
@@ -53,4 +55,4 @@ jobs:
           git pull origin main --rebase
           git add .
           git commit -m "Update coding test results"
-          git push https://${{ secrets.GH_PAT_VELOG }}@github.com/NuyHesHUB/coding-test-javascript.git
+          git push https://${{ secrets.GH_PAT_COTE }}@github.com/NuyHesHUB/coding-test-javascript.git
