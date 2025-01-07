@@ -43,6 +43,11 @@ jobs:
         env: 
           CHANGED_FILES: ${{ steps.changed-files.outputs.files }}
 
+      - name: Configure Git
+        run: |
+          git config user.name 'NuyHesHUB'
+          git config user.email 'shjoo@intube.kr'
+
       - name: Pull and Push changes
         run: |
           git pull origin main --rebase
