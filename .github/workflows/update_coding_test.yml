@@ -60,6 +60,7 @@ jobs:
             git push https://x-access-token:${{ secrets.GH_PAT_COTE }}@github.com/NuyHesHUB/coding-test-javascript.git
           else
             echo "No changes to commit."
-            
+          fi
+
     outputs:
         files: ${{ steps.changed-files.outputs.files }}
