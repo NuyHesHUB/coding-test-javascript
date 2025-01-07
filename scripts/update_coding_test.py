@@ -16,12 +16,10 @@ def get_changed_files():
     # 최근 커밋과 그 이전 커밋 간의 변경된 파일 목록 가져오기
     result = subprocess.run(['git', 'diff', '--name-only', 'HEAD~1'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-    # 명령어가 성공적으로 실행되었는지 확인
     if result.returncode != 0:
         print(f"Error executing git diff: {result.stderr}")
         return []
 
-    # 변경된 파일들을 줄바꿈으로 나누어 리스트로 반환
     changed_files = result.stdout.splitlines()
     print("Changed files:", changed_files)  # 디버깅용 로그
     return changed_files
@@ -31,7 +29,6 @@ def get_changed_files():
 def extract_problem_info(changed_files):
     problem_list = []
     for file_path in changed_files:
-        # 파일 경로에서 문제 정보를 추출
         parts = file_path.split(os.sep)
         print("File path parts:", parts)  # 디버깅용 로그
         if len(parts) >= 3:  # 파일 구조가 최소 Lv.1/문제제목/solution.js이어야 함
@@ -39,7 +36,7 @@ def extract_problem_info(changed_files):
                 "date": get_commit_date(os.getcwd()),  # 커밋 날짜
                 "level": parts[-3],                    # 예: Lv.1
                 "title": parts[-2],                    # 문제 제목
-                "url": f"https://github.com/NuyHesHUB/coding-test-javascript/tree/main/{file_path.replace(os.sep, '/')}"
+                "url": f"https://github.com/NuyHesHUB/coding-test-javascript/tree/main/{file_path.replace(os.sep, '/')}",
             }
             problem_list.append(problem_info)
     print("Extracted problem list:", problem_list)  # 디버깅용 로그
@@ -65,12 +62,17 @@ def update_readme(problem_list):
     if table_start_idx is None:
         content.append("\n### 문제 목록\n\n| 날짜       | 레벨 | 문제 제목                | 바로가기 |\n")
         content.append("|------------|------|--------------------------|----------|\n")
-        table_start_idx = len(content) - 1  # 새로운 테이블 헤더 위치 설정
+        table_start_idx = len(content) - 1
 
-    # 기존 테이블 뒤에 문제 정보 추가
+    # 기존 테이블 뒤에 문제 정보 추가 (중복 방지)
+    existing_rows = set(content[table_start_idx + 1 :])
     for problem in problem_list:
         new_row = f"| {problem['date']} | {problem['level']} | {problem['title']} | [바로가기]({problem['url']}) |\n"
-        content.insert(table_start_idx + 1, new_row)
+        if new_row not in existing_rows:
+            content.insert(table_start_idx + 1, new_row)
+
+    # 항상 변경 강제를 위해 타임스탬프 추가
+    content.append(f"\n_Last updated: {datetime.now()}_\n")
 
     # 수정된 내용을 다시 파일에 저장
     with open(readme_path, 'w', encoding='utf-8') as f:
@@ -80,5 +82,8 @@ def update_readme(problem_list):
 
 # 메인 실행 부분
 changed_files = get_changed_files()  # 변경된 파일들
-problem_list = extract_problem_info(changed_files)  # 문제 정보 추출
-update_readme(problem_list)  # README.md 업데이트
+if changed_files:  # 변경된 파일이 있는 경우만 처리
+    problem_list = extract_problem_info(changed_files)  # 문제 정보 추출
+    update_readme(problem_list)  # README.md 업데이트
+else:
+    print("No changed files detected.")  # 디버깅용 로그
