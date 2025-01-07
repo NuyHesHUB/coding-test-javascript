@@ -15,7 +15,7 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config user.name 'jaiden'
+          git config user.name 'NuyHesHUB'
           git config user.email 'shjoo@intube.kr'
 
       - name: Set up Python
