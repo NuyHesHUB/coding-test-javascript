@@ -43,12 +43,13 @@ def get_new_entry(file_path):
     title = urllib.parse.unquote(parts[-2])
 
     # URL 인코딩 수정
-    # encoded_parts = [codecs.encode(part, 'unicode_escape').decode('utf-8') for part in parts[-4:-1]]
-    encoded_parts = [urllib.parse.quote(part) for part in parts[:-1]]
-    # url = f"{REPO_URL}/{'/'.join(encoded_parts)}"
-    url = f"{REPO_URL}/{platform}/{level}/{title}"
 
     decoded_title = title.encode('latin1').decode('utf-8')
+    transform_title = decoded_title.replace(' ', '%2')
+
+    url = f"{REPO_URL}/{platform}/{level}/{transform_title}"
+
+    # decoded_url = url.encode('latin1').decode('utf-8')
 
     return f"| {date} | {level} | {decoded_title} | [바로가기]({url}) |"
 
