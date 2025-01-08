@@ -22,9 +22,17 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y locales
+          sudo locale-gen ko_KR.UTF-8
+          sudo update-locale LANG=ko_KR.UTF-8
           pip install gitpython
 
       - name: Run Python script
+        env:
+          LANG: ko_KR.UTF-8
+          LANGUAGE: ko_KR:ko
+          LC_ALL: ko_KR.UTF-8
         run: python scripts/update_coding_test.py
 
       - name: Commit and Push changes
