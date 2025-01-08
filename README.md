@@ -28,3 +28,4 @@
 | 2024-06-27 | Lv.1 | 제일 작은 수 제거하기 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%EC%A0%9C%EC%9D%BC%20%EC%9E%91%EC%9D%80%20%EC%88%98%20%EC%A0%9C%EA%B1%B0%ED%95%98%EA%B8%B0) |
 | 2025-01-02 | Lv.1 | 내적 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%EB%82%B4%EC%A0%81) |
 | 2025-01-08 | Lv.1 | jaidentest2 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/jaidentest2) |
+| 2025-01-08 | Lv.1 | jaidentest2 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/jaidentest2) |
