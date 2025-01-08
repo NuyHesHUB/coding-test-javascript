@@ -29,3 +29,4 @@
 | 2025-01-02 | Lv.1 | 내적 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%EB%82%B4%EC%A0%81) |
 
 | 2025-01-08 | Lv.1 | xë§í¼ ê°ê²©ì´ ìë nê°ì ì«ì | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/x\xeb\xa7\x8c\xed\x81\xbc \xea\xb0\x84\xea\xb2\xa9\xec\x9d\xb4 \xec\x9e\x88\xeb\x8a\x94 n\xea\xb0\x9c\xec\x9d\x98 \xec\x88\xab\xec\x9e\x90) |
+| 2025-01-08 | Lv.1 | xë§í¼ ê°ê²©ì´ ìë nê°ì ì«ì | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/x%C3%AB%C2%A7%C2%8C%C3%AD%C2%81%C2%BC%20%C3%AA%C2%B0%C2%84%C3%AA%C2%B2%C2%A9%C3%AC%C2%9D%C2%B4%20%C3%AC%C2%9E%C2%88%C3%AB%C2%8A%C2%94%20n%C3%AA%C2%B0%C2%9C%C3%AC%C2%9D%C2%98%20%C3%AC%C2%88%C2%AB%C3%AC%C2%9E%C2%90) |
