@@ -1,8 +1,8 @@
 import os
 import git
 from datetime import datetime
-import urllib.parse
 import subprocess
+import codecs
 
 # 리포지토리 경로
 repo_path = '.'
@@ -22,58 +22,30 @@ def get_latest_file_path():
 
         # 변경된 파일 중 JavaScript 파일을 찾습니다.
         for file_path in changed_files:
-            if file_path.endswith('.js'):
-                print(f"JavaScript file found: {file_path}")
-                return file_path
-            
+            decoded_path = codecs.decode(file_path.strip('"'), 'unicode_escape')  # 파일 경로를 디코딩하고 따옴표를 제거합니다.
+            if decoded_path.endswith('.js'):
+                print(f"JavaScript file found: {decoded_path}")
+                return decoded_path
     except subprocess.CalledProcessError as e:
         print(f"Git Command Error: {e}")
         return None  # 오류가 발생하면 None을 반환합니다.
     
     print("No JavaScript file found in the latest commit.")
     return None  # js 파일이 없으면 None을 반환합니다.
-    
 
 def get_new_entry(file_path):
     # 파일 경로에서 디렉토리만 추출
     parts = file_path.split('/')
     date = datetime.now().strftime('%Y-%m-%d')
     platform = parts[-4]
-    level = parts[-3]
-    title = parts[-2]
-    encoded_title = urllib.parse.quote(title)
-    link = f'{REPO_URL}/{platform}/{level}/{encoded_title}'
+    url = f"{REPO_URL}/{urllib.parse.quote('/'.join(parts[:-1]))}"
+    return f"- [{platform}]({url}) - {date}"
 
-    return {
-        'date': date,
-        'platform': platform,
-        'level': level,
-        'title': title,
-        'link': link
-    }
-
-def update_readme(new_entry):
-    # README 파일의 현재 내용을 읽어옵니다.
-    with open(README_PATH, 'r', encoding = 'utf-8') as file:
-        lines = file.readlines()
-
-    # 새로운 항목을 삽입할 인덱스를 찾습니다.
-    for i, line in enumerate(lines):
-        if line.startswith('| 날짜'):
-            insert_index = i + 2
-            break
-
-    # 새로운 항목 라인을 생성합니다.
-    new_line = f"| {new_entry['date']} | {new_entry['level']} | {new_entry['title']} | [바로가기]({new_entry['link']}) |\n"
-
-    # 새로운 항목을 라인에 삽입합니다
-    lines.insert(insert_index, new_line)
-
-    with open(README_PATH, 'w', encoding = 'utf-8') as file:
-        file.writelines(lines)
-
+# Run the function and print the result
 file_path = get_latest_file_path()
 if file_path:
     print(f"Latest JavaScript file path: {file_path}")
+    new_entry = get_new_entry(file_path)
+    print(f"New entry: {new_entry}")
 else:
     print("No JavaScript file found.")
