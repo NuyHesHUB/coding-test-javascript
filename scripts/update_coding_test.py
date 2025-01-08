@@ -13,12 +13,17 @@ def get_latest_file_path():
     repo = git.Repo(repo_path) # 'repo_path' 경로의 Git 리포지토리를 엽니다.
     latest_commit = repo.head.commit # 현재 브랜치의 최신 커밋을 가져옵니다.
 
-    # 최신 커밋과 그 이전 커밋('HEAD~1') 간의 차이를 순회합니다.
-    for diff in latest_commit.diff('HEAD~1'):
-        if diff.a_path.startswith('.js'): # 변경된 파일이 js 파일인지 확인합니다.
-            return diff.a_path # js 파일의 경로를 반환합니다.
+    try:
+        # 최신 커밋과 그 이전 커밋('HEAD~1') 간의 차이를 순회합니다.
+        for diff in latest_commit.diff('HEAD~1'):
+            if diff.a_path.endswith('.js'): # 변경된 파일이 js 파일인지 확인합니다.
+                return diff.a_path # js 파일의 경로를 반환합니다.
+    except git.exc.GitCommandError as e:
+        print(f"Error: {e}")
+        return None # 오류가 발생하면 None을 반환합니다.
     
     return None # js 파일이 없으면 None을 반환합니다.
+    
 
 def get_new_entry(file_path):
     # 파일 경로에서 디렉토리만 추출
