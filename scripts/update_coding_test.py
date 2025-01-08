@@ -38,7 +38,11 @@ def get_new_entry(file_path):
     parts = file_path.split('/')
     date = datetime.now().strftime('%Y-%m-%d')
     platform = parts[-4]
-    url = f"{REPO_URL}/{urllib.parse.quote('/'.join(parts[:-1]))}"
+    
+    # URL 인코딩 수정
+    encoded_parts = [codecs.encode(part, 'unicode_escape').decode('utf-8') for part in parts[:-1]]
+    url = f"{REPO_URL}/{'/'.join(encoded_parts)}"
+    
     return f"- [{platform}]({url}) - {date}"
 
 # Run the function and print the result
