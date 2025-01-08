@@ -21,7 +21,7 @@ def get_changed_files():
         return []
 
     changed_files = result.stdout.splitlines()
-    print("Changed files:", changed_files)  # 디버깅용 로그
+    print("get_changed_files테스트 files:", changed_files)  # 디버깅용 로그
     return changed_files
 
 
@@ -30,7 +30,7 @@ def extract_problem_info(changed_files):
     problem_list = []
     for file_path in changed_files:
         parts = file_path.split(os.sep)
-        print("File path parts:", parts)  # 디버깅용 로그
+        print("File path 테스트 parts:", parts)  # 디버깅용 로그
         if len(parts) >= 3:  # 파일 구조가 최소 Lv.1/문제제목/solution.js이어야 함
             problem_info = {
                 "date": get_commit_date(os.getcwd()),  # 커밋 날짜
@@ -39,7 +39,7 @@ def extract_problem_info(changed_files):
                 "url": f"https://github.com/NuyHesHUB/coding-test-javascript/tree/main/{file_path.replace(os.sep, '/')}",
             }
             problem_list.append(problem_info)
-    print("Extracted problem list:", problem_list)  # 디버깅용 로그
+    print("Extracted problem list 테스트 :", problem_list)  # 디버깅용 로그
     return problem_list
 
 
@@ -60,7 +60,7 @@ def update_readme(problem_list):
 
     # 테이블이 없다면 새로운 테이블 헤더 추가
     if table_start_idx is None:
-        content.append("\n### 문제 목록\n\n| 날짜       | 레벨 | 문제 제목                | 바로가기 |\n")
+        content.append("| 날짜       | 레벨 | 문제 제목                | 바로가기 |\n")
         content.append("|------------|------|--------------------------|----------|\n")
         table_start_idx = len(content) - 1
 
