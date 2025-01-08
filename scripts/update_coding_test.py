@@ -15,7 +15,7 @@ def get_latest_file_path():
 
     try:
         # 최신 커밋의 변경된 파일 목록을 가져옵니다.
-        for diff in latest_commit.diff('HEAD~1'):
+        for diff in latest_commit.diff('HEAD^'):
             if diff.a_path.endswith('.js'):  # 변경된 파일이 js 파일인지 확인합니다.
                 return diff.a_path  # js 파일의 경로를 반환합니다.
     except git.exc.GitCommandError as e:
