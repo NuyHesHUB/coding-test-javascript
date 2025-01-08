@@ -45,7 +45,7 @@ def get_new_entry(file_path):
     # URL 인코딩 수정
 
     decoded_title = title.encode('latin1').decode('utf-8')
-    transform_title = decoded_title.replace(' ', '%2')
+    transform_title = decoded_title.replace(' ', '%20')
 
     url = f"{REPO_URL}/{platform}/{level}/{transform_title}"
 
