@@ -18,14 +18,14 @@ def get_latest_file_path():
         print(f"Latest commit hash: {latest_commit_hash}")
 
         # 최신 커밋의 변경된 파일 목록을 가져옵니다.
-        changed_files = subprocess.check_output(['git', 'show', '--pretty=', '--name-only', latest_commit_hash], cwd=repo_path).decode('utf-8').strip().split('\n')
+        changed_files = subprocess.check_output(['git', 'diff', '--name-only', latest_commit_hash + '^!', '--diff-filter=AM'], cwd=repo_path).decode('utf-8').strip().split('\n')
         print(f"Changed files: {changed_files}")
 
         # 변경된 파일 중 JavaScript 파일을 찾습니다.
         for file_path in changed_files:
             decoded_path = codecs.decode(file_path.strip('"'), 'unicode_escape')  # 파일 경로를 디코딩하고 따옴표를 제거합니다.
             if decoded_path.endswith('.js'):
-                print(f"JavaScript file found: {decoded_path}")
+                print(f"JavaScript file found: {decoded_path.encode('latin1').decode('utf-8')}")
                 return decoded_path
     except subprocess.CalledProcessError as e:
         print(f"Git Command Error: {e}")
@@ -42,14 +42,10 @@ def get_new_entry(file_path):
     level = urllib.parse.unquote(parts[-3])
     title = urllib.parse.unquote(parts[-2])
 
-    # URL 인코딩 수정
-
     decoded_title = title.encode('latin1').decode('utf-8')
     transform_title = decoded_title.replace(' ', '%20')
 
     url = f"{REPO_URL}/{platform}/{level}/{transform_title}"
-
-    # decoded_url = url.encode('latin1').decode('utf-8')
 
     return f"| {date} | {level} | {decoded_title} | [바로가기]({url}) |"
 
