@@ -37,4 +37,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_PAT_COTE }}
         run: |
           git pull origin main
-          git push https://${{ secrets.GH_PAT_COTE }}@github.com/NuyHesHUB/coding-test-javascript.git"
+          git push https://${{ secrets.GH_PAT_COTE }}@github.com/NuyHesHUB/coding-test-javascript.git

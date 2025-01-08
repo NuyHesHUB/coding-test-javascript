@@ -14,7 +14,12 @@ def get_commit_date(repo_path):
 # 변경된 파일 목록을 가져오는 함수
 def get_changed_files():
     # 최근 커밋과 그 이전 커밋 간의 변경된 파일 목록 가져오기
-    result = subprocess.run(['git', 'diff', '--name-only', 'HEAD~1'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    result = subprocess.run(
+        ['git', 'diff', '--name-only', 'HEAD~1'], 
+        stdout=subprocess.PIPE, 
+        stderr=subprocess.PIPE, 
+        text=True
+    )
 
     if result.returncode != 0:
         print(f"Error executing git diff: {result.stderr}")
@@ -77,13 +82,11 @@ def update_readme(problem_list):
     # 수정된 내용을 다시 파일에 저장
     with open(readme_path, 'w', encoding='utf-8') as f:
         f.writelines(content)
-    print("README.md updated successfully.")  # 디버깅용 로그
 
-
-# 메인 실행 부분
-changed_files = get_changed_files()  # 변경된 파일들
-if changed_files:  # 변경된 파일이 있는 경우만 처리
-    problem_list = extract_problem_info(changed_files)  # 문제 정보 추출
-    update_readme(problem_list)  # README.md 업데이트
-else:
-    print("No changed files detected.")  # 디버깅용 로그
+if __name__ == "__main__":
+    changed_files = get_changed_files()  # 변경된 파일들
+    if changed_files:  # 변경된 파일이 있는 경우만 처리
+        problem_list = extract_problem_info(changed_files)  # 문제 정보 추출
+        update_readme(problem_list)  # README.md 업데이트
+    else:
+        print("No changed files detected.")  # 디버깅용 로그
