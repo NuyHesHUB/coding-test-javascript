@@ -46,10 +46,8 @@ def get_new_entry(file_path):
     # encoded_parts = [codecs.encode(part, 'unicode_escape').decode('utf-8') for part in parts[-4:-1]]
     encoded_parts = [urllib.parse.quote(part) for part in parts[:-1]]
     url = f"{REPO_URL}/{'/'.join(encoded_parts)}"
-
-    decoded_title = title.encode('latin1').decode('unicode_escape')
     
-    return f"| {date} | {level} | {decoded_title} | [바로가기]({url}) |"
+    return f"| {date} | {level} | {title} | [바로가기]({url}) |"
 
 def update_readme(new_entry):
     with open(README_PATH, 'a', encoding='utf-8') as readme_file:
