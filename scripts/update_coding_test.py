@@ -37,13 +37,19 @@ def get_new_entry(file_path):
     # 파일 경로에서 디렉토리만 추출
     parts = file_path.split('/')
     date = datetime.now().strftime('%Y-%m-%d')
-    platform = parts[-4]
-    
+    # platform = parts[-4]
+    level = parts[-3]
+    title = parts[-2]
+
     # URL 인코딩 수정
-    encoded_parts = [codecs.encode(part, 'unicode_escape').decode('utf-8') for part in parts[:-1]]
+    encoded_parts = [codecs.encode(part, 'unicode_escape').decode('utf-8') for part in parts[-4:-1]]
     url = f"{REPO_URL}/{'/'.join(encoded_parts)}"
     
-    return f"- [{platform}]({url}) - {date}"
+    return f"| {date} | {level} | {title} | [바로가기]({url}) |"
+
+def update_readme(new_entry):
+    with open(README_PATH, 'a', encoding='utf-8') as readme_file:
+        readme_file.write(f"\n{new_entry}")
 
 # Run the function and print the result
 file_path = get_latest_file_path()
@@ -51,5 +57,6 @@ if file_path:
     print(f"Latest JavaScript file path: {file_path}")
     new_entry = get_new_entry(file_path)
     print(f"New entry: {new_entry}")
+    update_readme(new_entry)
 else:
     print("No JavaScript file found.")

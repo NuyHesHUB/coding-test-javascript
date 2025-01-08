@@ -1,58 +1,55 @@
 import os
+import git
+from datetime import datetime
 import subprocess
+import codecs
 
-# 문제 리스트를 최상위 README.md에 추가하는 함수
-def update_readme(problem_list, readme_path):
-    with open(readme_path, 'r+', encoding='utf-8') as file:
-        content = file.readlines()
-        
-        # 마지막에 문제 리스트를 추가
-        content.append("\n## 최근 풀었던 문제들\n")
-        for problem in problem_list:
-            content.append(f"- **{problem['title']}** (Level {problem['level']}): {problem['url']} - {problem['platform_type']} (풀었던 날짜: {problem['date']})\n")
-        
-        # 파일의 끝에 추가 후 저장
-        file.seek(0)
-        file.writelines(content)
+# 리포지토리 경로
+repo_path = '.'
 
-# 커밋된 파일의 날짜를 가져오는 함수 (YYYY-MM-DD 형식)
-def get_commit_date(file_path):
+README_PATH = os.path.join(repo_path, 'README.md')
+REPO_URL = 'https://github.com/NuyHesHUB/coding-test-javascript/tree/main'
+
+def get_latest_file_path():
     try:
-        result = subprocess.run(
-            ['git', 'log', '--date=short', '--format=%cd', file_path],
-            stdout = subprocess.PIPE,
-            stderr = subprocess.PIPE,
-            text = True,
-            check = True
-        )
-        commit_date = result.stdout.splitlines()[0]
-        return commit_date
-    
-    except subprocess.CalledProcessError as e:
-        print(f"Error while getting commit date for {file_path}: {e}")
-        return "Unknown"
-    
-# 변경된 파일에서 문제의 폴더명을 추출하여 문제 리스트를 생성하는 함수
-def extract_folder_name(file_paths):
-    test_list = []
-    for file_path in file_paths:
-        # 파일 경로에서 디렉토리만 추출
-        dir_path = os.path.dirname(file_path)
-        # 디렉토리를 계층적으로 나누기
-        parts = dir_path.split(os.sep)
-        domain = 'https://github.com/NuyHesHUB/coding-test-javascript/tree/main'
-        if len(parts) >= 3:
-            platform_type = parts[-3]
-            level = parts[-2]
-            title = parts[-1]
-            date = get_commit_date(file_path)
-            url = f'{domain}/{platform_type}/{level}/{title.replace(" ", "%20")}'
+        # 최신 커밋의 해시를 가져옵니다.
+        latest_commit_hash = subprocess.check_output(['git', 'log', '-1', '--pretty=format:%H'], cwd=repo_path).decode('utf-8').strip()
+        print(f"Latest commit hash: {latest_commit_hash}")
 
-            test_list.append({
-                'platform_type': platform_type,
-                'level': level,
-                'title': title,
-                'url': url,
-                'date': date
-            })
-    return test_list
+        # 최신 커밋의 변경된 파일 목록을 가져옵니다.
+        changed_files = subprocess.check_output(['git', 'show', '--pretty=', '--name-only', latest_commit_hash], cwd=repo_path).decode('utf-8').strip().split('\n')
+        print(f"Changed files: {changed_files}")
+
+        # 변경된 파일 중 JavaScript 파일을 찾습니다.
+        for file_path in changed_files:
+            decoded_path = codecs.decode(file_path.strip('"'), 'unicode_escape')  # 파일 경로를 디코딩하고 따옴표를 제거합니다.
+            if decoded_path.endswith('.js'):
+                print(f"JavaScript file found: {decoded_path}")
+                return decoded_path
+    except subprocess.CalledProcessError as e:
+        print(f"Git Command Error: {e}")
+        return None  # 오류가 발생하면 None을 반환합니다.
+    
+    print("No JavaScript file found in the latest commit.")
+    return None  # js 파일이 없으면 None을 반환합니다.
+
+def get_new_entry(file_path):
+    # 파일 경로에서 디렉토리만 추출
+    parts = file_path.split('/')
+    date = datetime.now().strftime('%Y-%m-%d')
+    platform = parts[-4]
+    
+    # URL 인코딩 수정
+    encoded_parts = [codecs.encode(part, 'unicode_escape').decode('utf-8') for part in parts[:-1]]
+    url = f"{REPO_URL}/{'/'.join(encoded_parts)}"
+    
+    return f"- [{platform}]({url}) - {date}"
+
+# Run the function and print the result
+file_path = get_latest_file_path()
+if file_path:
+    print(f"Latest JavaScript file path: {file_path}")
+    new_entry = get_new_entry(file_path)
+    print(f"New entry: {new_entry}")
+else:
+    print("No JavaScript file found.")
