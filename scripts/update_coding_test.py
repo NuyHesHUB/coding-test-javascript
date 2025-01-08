@@ -1,93 +1,68 @@
 import os
 import git
 from datetime import datetime
-import subprocess
+import urllib.parse
 
-# 커밋 날짜를 가져오는 함수
-def get_commit_date(repo_path):
-    repo = git.Repo(repo_path)
-    commit = repo.head.commit
-    return commit.committed_datetime.strftime('%Y-%m-%d')  # YYYY-MM-DD 형식
+# 리포지토리 경로
+repo_path = '.'
 
+README_PATH = os.path.join(repo_path, 'README.md')
+REPO_URL = 'https://github.com/NuyHesHUB/coding-test-javascript/tree/main'
 
-# 변경된 파일 목록을 가져오는 함수
-def get_changed_files():
-    # 최근 커밋과 그 이전 커밋 간의 변경된 파일 목록 가져오기
-    result = subprocess.run(
-        ['git', 'diff', '--name-only', 'HEAD~1'], 
-        stdout=subprocess.PIPE, 
-        stderr=subprocess.PIPE, 
-        text=True
-    )
+def get_latest_file_path():
+    repo = git.Repo(repo_path) # 'repo_path' 경로의 Git 리포지토리를 엽니다.
+    latest_commit = repo.head.commit # 현재 브랜치의 최신 커밋을 가져옵니다.
 
-    if result.returncode != 0:
-        print(f"Error executing git diff: {result.stderr}")
-        return []
+    # 최신 커밋과 그 이전 커밋('HEAD~1') 간의 차이를 순회합니다.
+    for diff in latest_commit.diff('HEAD~1'):
+        if diff.a_path.startswith('.js'): # 변경된 파일이 js 파일인지 확인합니다.
+            return diff.a_path # js 파일의 경로를 반환합니다.
+    
+    return None # js 파일이 없으면 None을 반환합니다.
 
-    changed_files = result.stdout.splitlines()
-    print("get_changed_files테스트 files:", changed_files)  # 디버깅용 로그
-    return changed_files
+def get_new_entry(file_path):
+    # 파일 경로에서 디렉토리만 추출
+    parts = file_path.split('/')
+    date = datetime.now().strftime('%Y-%m-%d')
+    platform = parts[-4]
+    level = parts[-3]
+    title = parts[-2]
+    encoded_title = urllib.parse.quote(title)
+    link = f'{REPO_URL}/{platform}/{level}/{encoded_title}'
 
+    return {
+        'date': date,
+        'platform': platform,
+        'level': level,
+        'title': title,
+        'link': link
+    }
 
-# 문제 정보를 추출하는 함수
-def extract_problem_info(changed_files):
-    problem_list = []
-    for file_path in changed_files:
-        parts = file_path.split(os.sep)
-        print("File path 테스트 parts:", parts)  # 디버깅용 로그
-        if len(parts) >= 3:  # 파일 구조가 최소 Lv.1/문제제목/solution.js이어야 함
-            problem_info = {
-                "date": get_commit_date(os.getcwd()),  # 커밋 날짜
-                "level": parts[-3],                    # 예: Lv.1
-                "title": parts[-2],                    # 문제 제목
-                "url": f"https://github.com/NuyHesHUB/coding-test-javascript/tree/main/{file_path.replace(os.sep, '/')}",
-            }
-            problem_list.append(problem_info)
-    print("Extracted problem list 테스트 :", problem_list)  # 디버깅용 로그
-    return problem_list
+def update_readme(new_entry):
+    # README 파일의 현재 내용을 읽어옵니다.
+    with open(README_PATH, 'r', encoding = 'utf-8') as file:
+        lines = file.readlines()
 
-
-# README.md 파일 업데이트하는 함수
-def update_readme(problem_list):
-    repo_path = '.'
-    # readme_path = os.path.join(os.getcwd(), 'README.md')
-    readme_path = os.path.join(repo_path, 'README.md')
-
-    # README 파일 읽기
-    with open(readme_path, 'r', encoding='utf-8') as f:
-        content = f.readlines()
-
-    # 기존 테이블의 시작 인덱스 확인
-    table_start_idx = None
-    for i, line in enumerate(content):
-        if line.startswith("| 날짜"):
-            table_start_idx = i
+    # 새로운 항목을 삽입할 인덱스를 찾습니다.
+    for i, line in enumerate(lines):
+        if line.startswith('| 날짜'):
+            insert_index = i + 2
             break
 
-    # 테이블이 없다면 새로운 테이블 헤더 추가
-    if table_start_idx is None:
-        content.append("| 날짜       | 레벨 | 문제 제목                | 바로가기 |\n")
-        content.append("|------------|------|--------------------------|----------|\n")
-        table_start_idx = len(content) - 1
+    # 새로운 항목 라인을 생성합니다.
+    new_line = f"| {new_entry['date']} | {new_entry['level']} | {new_entry['title']} | [바로가기]({new_entry['link']}) |\n"
 
-    # 기존 테이블 뒤에 문제 정보 추가 (중복 방지)
-    existing_rows = set(content[table_start_idx + 1 :])
-    for problem in problem_list:
-        new_row = f"| {problem['date']} | {problem['level']} | {problem['title']} | [바로가기]({problem['url']}) |\n"
-        if new_row not in existing_rows:
-            content.insert(table_start_idx + 1, new_row)
+    # 새로운 항목을 라인에 삽입합니다
+    lines.insert(insert_index, new_line)
 
-    # 항상 변경 강제를 위해 타임스탬프 추가
-    content.append(f"\n_Last updated: {datetime.now()}_\n")
-
-    # 수정된 내용을 다시 파일에 저장
-    with open(readme_path, 'w', encoding='utf-8') as f:
-        f.writelines(content)
+    with open(README_PATH, 'w', encoding = 'utf-8') as file:
+        file.writelines(lines)
 
 if __name__ == "__main__":
-    changed_files = get_changed_files()  # 변경된 파일들
-    if changed_files:  # 변경된 파일이 있는 경우만 처리
-        problem_list = extract_problem_info(changed_files)  # 문제 정보 추출
-        update_readme(problem_list)  # README.md 업데이트
+    file_path = get_latest_file_path() # 최신 커밋에서 변경된 js 파일의 경로를 가져옵니다.
+
+    if file_path:
+        new_entry = get_new_entry(file_path) # 리드미에 추가할 객체 data, level, title 등을 가져옵니다.
+        update_readme(new_entry)
     else:
-        print("No changed files detected.")  # 디버깅용 로그
+        print("No new JavaScript file found.")
