@@ -2,6 +2,7 @@ import os
 import git
 from datetime import datetime
 import urllib.parse
+import subprocess
 
 # 리포지토리 경로
 repo_path = '.'
@@ -10,21 +11,25 @@ README_PATH = os.path.join(repo_path, 'README.md')
 REPO_URL = 'https://github.com/NuyHesHUB/coding-test-javascript/tree/main'
 
 def get_latest_file_path():
-    repo = git.Repo(repo_path)  # 'repo_path' 경로의 Git 리포지토리를 엽니다.
-    latest_commit = repo.head.commit  # 현재 브랜치의 최신 커밋을 가져옵니다.
-
     try:
+        # 최신 커밋의 해시를 가져옵니다.
+        latest_commit_hash = subprocess.check_output(['git', 'log', '-1', '--pretty=format:%H'], cwd=repo_path).decode('utf-8').strip()
+        print(f"Latest commit hash: {latest_commit_hash}")
+
         # 최신 커밋의 변경된 파일 목록을 가져옵니다.
-        for diff in latest_commit.diff('HEAD^'):
-            if diff.a_path.endswith('.js'):  # 변경된 파일이 js 파일인지 확인합니다.
-                return diff.a_path  # js 파일의 경로를 반환합니다.
-    except git.exc.GitCommandError as e:
+        changed_files = subprocess.check_output(['git', 'show', '--pretty=', '--name-only', latest_commit_hash], cwd=repo_path).decode('utf-8').strip().split('\n')
+        print(f"Changed files: {changed_files}")
+
+        # 변경된 파일 중 JavaScript 파일을 찾습니다.
+        for file_path in changed_files:
+            if file_path.endswith('.js'):
+                print(f"JavaScript file found: {file_path}")
+                return file_path
+    except subprocess.CalledProcessError as e:
         print(f"Git Command Error: {e}")
         return None  # 오류가 발생하면 None을 반환합니다.
-    except IndexError:
-        print("No previous commit found.")
-        return None  # 이전 커밋이 없으면 None을 반환합니다.
     
+    print("No JavaScript file found in the latest commit.")
     return None  # js 파일이 없으면 None을 반환합니다.
     
 
