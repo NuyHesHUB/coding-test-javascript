@@ -38,20 +38,21 @@ def get_new_entry(file_path):
     # 파일 경로에서 디렉토리만 추출
     parts = file_path.split('/')
     date = datetime.now().strftime('%Y-%m-%d')
-    # platform = parts[-4]
-    level = parts[-3]
-    title = parts[-2]
+    platform = urllib.parse.unquote(parts[-4])
+    level = urllib.parse.unquote(parts[-3])
+    title = urllib.parse.unquote(parts[-2])
 
     # URL 인코딩 수정
     # encoded_parts = [codecs.encode(part, 'unicode_escape').decode('utf-8') for part in parts[-4:-1]]
     encoded_parts = [urllib.parse.quote(part) for part in parts[:-1]]
-    url = f"{REPO_URL}/{'/'.join(encoded_parts)}"
+    # url = f"{REPO_URL}/{'/'.join(encoded_parts)}"
+    url = f"{REPO_URL}/{platform}/{level}/{title}"
     
     return f"| {date} | {level} | {title} | [바로가기]({url}) |"
 
 def update_readme(new_entry):
     with open(README_PATH, 'a', encoding='utf-8') as readme_file:
-        readme_file.write(f"\n{new_entry}")
+        readme_file.write(f"{new_entry}\n")
 
 # Run the function and print the result
 file_path = get_latest_file_path()
