@@ -14,14 +14,12 @@ REPO_URL = 'https://github.com/NuyHesHUB/coding-test-javascript/tree/main'
 def get_latest_file_path():
     try:
         # 최신 커밋의 해시를 가져옵니다.
-        """ latest_commit_hash = subprocess.check_output(['git', 'log', '-1', '--pretty=format:%H'], cwd=repo_path).decode('utf-8').strip() """
-        latest_commit_hash = subprocess.check_output(['git', 'log', '-1', '--pretty=format:%H'], cwd=repo_path).strip()
+        latest_commit_hash = subprocess.check_output(['git', 'log', '-1', '--pretty=format:%H'], cwd=repo_path).decode('utf-8').strip()
 
         print(f"Latest commit hash: {latest_commit_hash}")
 
         # 최신 커밋의 변경된 파일 목록을 가져옵니다.
-        """ changed_files = subprocess.check_output(['git', 'show', '--pretty=', '--name-only', latest_commit_hash], cwd=repo_path).decode('utf-8').strip().split('\n') """
-        changed_files = subprocess.check_output(['git', 'show', '--pretty=', '--name-only', latest_commit_hash], cwd=repo_path).strip().split('\n')
+        changed_files = subprocess.check_output(['git', 'show', '--pretty=', '--name-only', latest_commit_hash], cwd=repo_path).decode('utf-8').strip().split('\n')
 
         print(f"Changed files: {changed_files}")
 
