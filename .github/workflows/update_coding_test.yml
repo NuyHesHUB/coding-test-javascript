@@ -20,6 +20,10 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Install dependencies
+        run: |
+          pip install gitpython
+
       - name: Run Python script
         run: python scripts/update_coding_test.py
 
