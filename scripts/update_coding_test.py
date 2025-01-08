@@ -28,13 +28,16 @@ def get_latest_file_path():
             return None
 
         # 최신 푸시된 커밋의 변경된 파일 목록을 가져옵니다.
-        changed_files = subprocess.check_output(['git', 'show', '--pretty=', '--name-only', latest_commit_hash], cwd=repo_path).decode('utf-8').strip().split('\n')
+        """ changed_files = subprocess.check_output(['git', 'show', '--pretty=', '--name-only', latest_commit_hash], cwd=repo_path).decode('utf-8').strip().split('\n') """
+
+        changed_files = subprocess.check_output(['git', 'diff-tree', '--no-commit-id', '--name-only', '-r', latest_commit_hash], cwd=repo_path).decode('utf-8').strip().split('\n')
+        
         print(f"Changed files: {changed_files}")
 
         # 변경된 파일 중 JavaScript 파일을 찾습니다.
         for file_path in changed_files:
             print(f"file_path: {file_path}")
-            decoded_path = file_path.strip('"')  # 파일 경로를 디코딩하고 따옴표를 제거합니다.
+            decoded_path = codecs.decode(file_path.strip('"'), 'unicode_escape')  # 파일 경로를 디코딩하고 따옴표를 제거합니다.
             if decoded_path.endswith('.js'):
                 print(f"JavaScript file found: {decoded_path}")
                 return decoded_path
