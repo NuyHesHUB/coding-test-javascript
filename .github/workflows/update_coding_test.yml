@@ -30,7 +30,7 @@ jobs:
           pip install feedparser gitpython
 
       - name: Run Python script
-        run: python scripts/update_coding_test.py "$CHANGED_FILES"
+        run: python scripts/update_coding_test.py
 
       - name: Pull and Push changes
         env:
