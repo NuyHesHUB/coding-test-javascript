@@ -15,11 +15,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Configure Git
-        run: |
-          git config user.name 'NuyHesHUB'
-          git config user.email 'shjoo@intube.kr'
-
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -27,19 +22,21 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install feedparser gitpython
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
       - name: Run Python script
         run: python scripts/update_coding_test.py
 
-      - name: Check if there are any changes
-        id: verify_diff
+      - name: Check for changes
+        id: check_changes
         run: |
-          git status
-          git diff --quiet . || echo "changed=true" >> $GITHUB_OUTPUT
+          git config user.name 'NuyHesHUB'
+          git config user.email 'shjoo@intube.kr'
+          git diff --exit-code || echo "::set-output name=changed::true"
           
       - name: Pull and Push changes
-        if: steps.verify_diff.outputs.changed == 'true'
+        if: steps.check_changes.outputs.changed == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT_COTE }}
         run: |
