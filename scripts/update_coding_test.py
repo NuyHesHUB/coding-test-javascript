@@ -25,6 +25,7 @@ def get_latest_file_path():
             if file_path.endswith('.js'):
                 print(f"JavaScript file found: {file_path}")
                 return file_path
+            
     except subprocess.CalledProcessError as e:
         print(f"Git Command Error: {e}")
         return None  # 오류가 발생하면 None을 반환합니다.
@@ -71,11 +72,8 @@ def update_readme(new_entry):
     with open(README_PATH, 'w', encoding = 'utf-8') as file:
         file.writelines(lines)
 
-if __name__ == "__main__":
-    file_path = get_latest_file_path() # 최신 커밋에서 변경된 js 파일의 경로를 가져옵니다.
-
-    if file_path:
-        new_entry = get_new_entry(file_path) # 리드미에 추가할 객체 data, level, title 등을 가져옵니다.
-        update_readme(new_entry)
-    else:
-        print("No new JavaScript file found.")
+file_path = get_latest_file_path()
+if file_path:
+    print(f"Latest JavaScript file path: {file_path}")
+else:
+    print("No JavaScript file found.")
