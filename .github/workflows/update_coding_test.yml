@@ -32,6 +32,11 @@ jobs:
       - name: Run Python script
         run: python scripts/update_coding_test.py
 
+      - name: Check if there are any changes
+        id: verify_diff
+        run: |
+          git diff --quiet . || echo "changed=true" >> $GITHUB_OUTPUT
+          
       - name: Pull and Push changes
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT_COTE }}
