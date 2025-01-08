@@ -35,13 +35,15 @@ jobs:
       - name: Check if there are any changes
         id: verify_diff
         run: |
+          git status
           git diff --quiet . || echo "changed=true" >> $GITHUB_OUTPUT
           
       - name: Pull and Push changes
+        if: steps.verify_diff.outputs.changed == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT_COTE }}
         run: |
           git pull origin main
           git add .
-          git commit -m "Update coding test"
-          git push https://x-access-token:${GITHUB_TOKEN}@github.com/NuyHesHUB/coding-test-javascript.git
+          git commit -m "Update coding test" || echo "No changes to commit"
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/NuyHesHUB/coding-test-javascript.git || echo "No changes to push"
