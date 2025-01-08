@@ -33,6 +33,8 @@ jobs:
         run: python scripts/update_coding_test.py
 
       - name: Pull and Push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT_COTE }}
         run: |
           git pull origin main
-          git push https://${{ secrets.GH_PAT_COTE }}@github.com/NuyHesHUB/coding-test-javascript.git
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/NuyHesHUB/coding-test-javascript.git

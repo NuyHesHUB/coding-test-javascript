@@ -3,7 +3,6 @@ import git
 from datetime import datetime
 import subprocess
 
-
 # 커밋 날짜를 가져오는 함수
 def get_commit_date(repo_path):
     repo = git.Repo(repo_path)
@@ -50,7 +49,9 @@ def extract_problem_info(changed_files):
 
 # README.md 파일 업데이트하는 함수
 def update_readme(problem_list):
-    readme_path = os.path.join(os.getcwd(), 'README.md')
+    repo_path = '.'
+    # readme_path = os.path.join(os.getcwd(), 'README.md')
+    readme_path = os.path.join(repo_path, 'README.md')
 
     # README 파일 읽기
     with open(readme_path, 'r', encoding='utf-8') as f:
