@@ -3,6 +3,7 @@ import git
 from datetime import datetime
 import subprocess
 import codecs
+import urllib.parse
 
 # 리포지토리 경로
 repo_path = '.'
@@ -42,7 +43,8 @@ def get_new_entry(file_path):
     title = parts[-2]
 
     # URL 인코딩 수정
-    encoded_parts = [codecs.encode(part, 'unicode_escape').decode('utf-8') for part in parts[-4:-1]]
+    # encoded_parts = [codecs.encode(part, 'unicode_escape').decode('utf-8') for part in parts[-4:-1]]
+    encoded_parts = [urllib.parse.quote(part) for part in parts[:-1]]
     url = f"{REPO_URL}/{'/'.join(encoded_parts)}"
     
     return f"| {date} | {level} | {title} | [바로가기]({url}) |"
