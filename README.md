@@ -29,3 +29,4 @@
 | 2025-01-02 | Lv.1 | 내적 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/%EB%82%B4%EC%A0%81) |
 | 2025-01-08 | Lv.1 | jaidentest2 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/jaidentest2) |
 | 2025-01-08 | Lv.1 | jaidentest2 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/jaidentest2) |
+| 2025-01-09 | Lv.1 | jaidentest2 | [바로가기](https://github.com/NuyHesHUB/coding-test-javascript/tree/main/Programmers/Lv.1/jaidentest2) |
