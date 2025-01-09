@@ -88,3 +88,7 @@ if file_path:
     update_readme(new_entry)
 else:
     print("No JavaScript file found.")
+
+
+# 중복된 커밋 방지
+# 날짜 커밋기준 날짜
