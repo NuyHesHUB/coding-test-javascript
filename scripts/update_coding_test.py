@@ -26,15 +26,18 @@ def get_latest_pushed_commit_hash(repo_path):
         print(f"Git Command Error: {e}")
         return None
 
-""" def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
+def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
     try:
         print(f"Checking commit: {commit_hash}")
 
         changed_files = subprocess.check_output(
             ['git', 'diff-tree', '--no-commit-id', '--name-only', '-r', commit_hash],
-            cwd=repo_path
-        ).decode('utf-8').strip().split('\n')
+            cwd=repo_path,
+            encoding='utf-8'
+        ).strip()
+        # ).decode('utf-8').strip().split('\n')
         
+        changed_files = changed_files.split('\n')
         print(f"Changed files: {changed_files}")
 
         filtered_files = [file for file in changed_files if file.endswith(file_extension)]
@@ -44,39 +47,8 @@ def get_latest_pushed_commit_hash(repo_path):
     
     except subprocess.CalledProcessError as e:
         print(f"Git command failed: {e}")
-        return [] """
-
-def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
-    try:
-        print(f"Checking commit: {commit_hash}")
-        
-        # 바이너리 모드로 출력 받기
-        process = subprocess.Popen(
-            ['git', 'diff-tree', '--no-commit-id', '--name-only', '-r', commit_hash],
-            cwd=repo_path,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
-        output, error = process.communicate()
-        
-        # 디코딩 및 경로 처리
-        changed_files = output.decode('utf-8', errors='ignore').strip().split('\n')
-        print(f"Raw changed files: {changed_files}")
-        
-        # 따옴표 제거 및 .js 파일 필터링
-        filtered_files = []
-        for file in changed_files:
-            file = file.strip('"').strip("'")  # 따옴표 제거
-            if file and file.endswith(file_extension):
-                filtered_files.append(file)
-        
-        print(f"Filtered files: {filtered_files}")
-        return filtered_files
-    
-    except Exception as e:
-        print(f"Error: {str(e)}")
         return []
-    
+
 def get_latest_file_path(file_paths):
     extracted_info = []
     for file_path in file_paths:
