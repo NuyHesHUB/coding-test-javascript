@@ -26,13 +26,16 @@ def get_latest_pushed_commit_hash(repo_path):
         print(f"Git Command Error: {e}")
         return None
 
-def get_changed_files_in_commit(repo_path, commit_hash):
+def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
     try:
         changed_files = subprocess.check_output(
             ['git', 'show', '--pretty=', '--name-only', commit_hash],
             cwd=repo_path
         ).decode('utf-8').strip().split('\n')
-        return [file for file in changed_files if file]
+        filtered_files = [file for file in changed_files if file.endswith(file_extension)]
+
+        return filtered_files
+    
     except subprocess.CalledProcessError as e:
         print(f"Error fetching changed files: {e}")
         return []
@@ -47,9 +50,17 @@ def get_latest_file_path(file_paths):
             title = parts[-2] """
             source = urllib.parse.unquote(parts[-4])
             level = urllib.parse.unquote(parts[-3])
-            title = urllib.parse.unquote(parts[-2])
+            # title = urllib.parse.unquote(parts[-2])
+            title = parts[-2]
 
-            decoded_title = title.encode('latin1').decode('utf-8')
+            # decoded_title = title.encode('latin1').decode('utf-8')
+            decoded_title = urllib.parse.unquote(title)
+            
+            try:
+                decoded_title = decoded_title.encode('latin1').decode('utf-8')
+            except UnicodeDecodeError:
+                pass  # 디코딩 오류가 나면 그냥 건너뜁니다
+
             transform_title = decoded_title.replace(' ', '%20')
             url = f"{REPO_URL}/{source}/{level}/{transform_title}"
 
@@ -73,7 +84,7 @@ def main(repo_path):
     if not latest_commit_hash:
         return
     
-    changed_files = get_changed_files_in_commit(repo_path, latest_commit_hash)
+    changed_files = get_changed_files_in_commit(repo_path, latest_commit_hash, file_extension='.js')
     if not changed_files:
         print("No changed files in the latest commit.")
         return
