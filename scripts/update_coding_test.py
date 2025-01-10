@@ -50,9 +50,9 @@ def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
             print("No changes detected")
             return [] """
         
-        print(f"Filtered files: {filtered_files}")
 
         filtered_files = [file for file in changed_files if file.endswith(file_extension)]
+        print(f"Filtered files: {filtered_files}")
 
         return filtered_files
     
