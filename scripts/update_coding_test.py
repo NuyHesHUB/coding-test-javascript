@@ -15,7 +15,7 @@ def get_latest_pushed_commit_hash(repo_path):
     try:
         latest_commit_hash = subprocess.check_output(
             # ['git', 'log', 'origin/main', '-1', '--pretty=format:%H'], 
-            ['git', 'rev-parse', 'HEAD~1'], 
+            ['git', 'rev-parse', 'HEAD'], 
             cwd=repo_path
         ).decode('utf-8').strip()
         print(f"Latest pushed commit hash: {latest_commit_hash}")
