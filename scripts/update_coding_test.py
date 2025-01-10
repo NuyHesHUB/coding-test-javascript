@@ -45,9 +45,9 @@ def get_latest_file_path(file_paths):
             """ source = parts[-4]
             level = parts[-3]
             title = parts[-2] """
-            source = urllib.parse.unquoto(parts[-4])
-            level = urllib.parse.unquoto(parts[-3])
-            title = urllib.parse.unquoto(parts[-2])
+            source = urllib.parse.unquote(parts[-4])
+            level = urllib.parse.unquote(parts[-3])
+            title = urllib.parse.unquote(parts[-2])
 
             decoded_title = title.encode('latin1').decode('utf-8')
             transform_title = decoded_title.replace(' ', '%20')
