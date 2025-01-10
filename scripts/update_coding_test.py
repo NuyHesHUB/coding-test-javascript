@@ -30,36 +30,13 @@ def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
     try:
         print(f"Checking commit: {commit_hash}")
 
-        """ changed_files = subprocess.check_output(
+        changed_files = subprocess.check_output(
             ['git', 'diff-tree', '--no-commit-id', '--name-only', '-r', commit_hash],
             cwd=repo_path,
-            encoding='utf-8'
-        ).strip()
-        # ).decode('utf-8').strip().split('\n')
+        ).decode('utf-8').strip().split('\n')
 
-        changed_files = changed_files.split('\n')
         print(f"Changed files: {changed_files}")
 
-        filtered_files = [file for file in changed_files if file.endswith(file_extension)]
-        print(f"Filtered files: {filtered_files}")
-
-        return filtered_files """
-        changed_files = subprocess.check_output(
-            ['git', 'show', '--name-only', '--pretty=', commit_hash],
-            cwd=repo_path,
-            encoding='utf-8'  # 명시적으로 UTF-8 인코딩을 설정
-        ).strip()
-
-        print(f"Changed files raw output: {changed_files}")  # 디버그용 출력
-
-        if not changed_files:
-            print("No changed files found in commit.")
-            return []
-
-        changed_files = changed_files.split('\n')  # 파일 경로를 줄바꿈 기준으로 분리
-        print(f"Changed files: {changed_files}")
-
-        # 필터링된 파일 리스트
         filtered_files = [file for file in changed_files if file.endswith(file_extension)]
         print(f"Filtered files: {filtered_files}")
 
