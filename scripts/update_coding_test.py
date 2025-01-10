@@ -38,18 +38,30 @@ def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
             text=True
         )
         print(f"Git status: {status.stdout}")
+
         changed_files = subprocess.check_output(
             ['git', 'show', '--pretty=', '--name-only', commit_hash],
             # ['git', 'diff-tree', '--no-commit-id', '--name-only', '-r', commit_hash],
             # ['git', 'diff', '--name-only', 'HEAD~1', 'HEAD'],
             cwd=repo_path
         ).decode('utf-8').strip().split('\n')
+
+        if not changed_files or changed_files[0] == '':
+            print("No changes detected")
+            return []
+        
+        print(f"Filtered files: {filtered_files}")
+
         filtered_files = [file for file in changed_files if file.endswith(file_extension)]
 
         return filtered_files
     
     except subprocess.CalledProcessError as e:
-        print(f"Error fetching changed files: {e}")
+        print(f"Git command failed: {e}")
+        print(f"Error output: {e.output.decode() if hasattr(e, 'output') else 'No error output'}")
+        return []
+    except Exception as e:
+        print(f"Unexpected error: {str(e)}")
         return []
 
 def get_latest_file_path(file_paths):
