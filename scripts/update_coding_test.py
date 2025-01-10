@@ -27,9 +27,13 @@ def get_latest_pushed_commit_hash(repo_path):
         return None
 
 def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
+    # git diff-tree --no-commit-id --name-only -r f38510176c636dfa096bd7527697c9f52858f8ec
+
     try:
         changed_files = subprocess.check_output(
-            ['git', 'show', '--pretty=', '--name-only', commit_hash],
+            # ['git', 'show', '--pretty=', '--name-only', commit_hash],
+            # ['git', 'diff-tree', '--no-commit-id', '--name-only', '-r', commit_hash],
+            ['git', 'diff', '--name-only', 'HEAD~1', 'HEAD'],
             cwd=repo_path
         ).decode('utf-8').strip().split('\n')
         filtered_files = [file for file in changed_files if file.endswith(file_extension)]
@@ -82,7 +86,7 @@ def update_readme(repo_path, info):
             readme_file.writelines(lines)
 
             for item in info:
-                readme_file.write(f"\n| 2025-01-10 | {item['level']} | {item['title']} | [바로가기]({item['url']})\n")
+                readme_file.write(f"| 2025-01-10 | {item['level']} | {item['title']} | [바로가기]({item['url']})\n")
                 print(f"README.md updated successfully!{readme_file}")
     except Exception as e:
         print(f"README.md updated fail: {e}")
