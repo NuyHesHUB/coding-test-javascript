@@ -31,13 +31,13 @@ def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
 
     try:
         # 먼저 git status 확인
-        status = subprocess.run(
+        """ status = subprocess.run(
             ['git', 'status'], 
             cwd=repo_path,
             capture_output=True,
             text=True
         )
-        print(f"Git status: {status.stdout}")
+        print(f"Git status: {status.stdout}") """
 
         changed_files = subprocess.check_output(
             # ['git', 'show', '--pretty=', '--name-only', commit_hash],
@@ -46,9 +46,9 @@ def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
             cwd=repo_path
         ).decode('utf-8').strip().split('\n')
 
-        if not changed_files or changed_files[0] == '':
+        """ if not changed_files or changed_files[0] == '':
             print("No changes detected")
-            return []
+            return [] """
         
         print(f"Filtered files: {filtered_files}")
 
@@ -58,10 +58,7 @@ def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
     
     except subprocess.CalledProcessError as e:
         print(f"Git command failed: {e}")
-        print(f"Error output: {e.output.decode() if hasattr(e, 'output') else 'No error output'}")
-        return []
-    except Exception as e:
-        print(f"Unexpected error: {str(e)}")
+        # print(f"Error output: {e.output.decode() if hasattr(e, 'output') else 'No error output'}")
         return []
 
 def get_latest_file_path(file_paths):
