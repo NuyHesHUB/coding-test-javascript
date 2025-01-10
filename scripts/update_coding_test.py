@@ -11,84 +11,81 @@ repo_path = '.'
 README_PATH = os.path.join(repo_path, 'README.md')
 REPO_URL = 'https://github.com/NuyHesHUB/coding-test-javascript/tree/main'
 
-def get_latest_pushed_commit_hash():
+def get_latest_pushed_commit_hash(repo_path):
     try:
-        # 최신 푸시된 커밋의 해시를 가져옵니다.
-        latest_commit_hash = subprocess.check_output(['git', 'log', 'origin/main', '-1', '--pretty=format:%H'], cwd=repo_path).decode('utf-8').strip()
+        latest_commit_hash = subprocess.check_output(
+            # ['git', 'log', 'origin/main', '-1', '--pretty=format:%H'], 
+            ['git', 'rev-parse', 'HEAD'], 
+            cwd=repo_path
+        ).decode('utf-8').strip()
         print(f"Latest pushed commit hash: {latest_commit_hash}")
+
         return latest_commit_hash
+    
     except subprocess.CalledProcessError as e:
         print(f"Git Command Error: {e}")
-        return None  # 오류가 발생하면 None을 반환합니다.
-    
-def get_latest_file_path():
-    try:
-        latest_commit_hash = get_latest_pushed_commit_hash()
-        if not latest_commit_hash:
-            return None
+        return None
 
-        # 최신 푸시된 커밋의 변경된 파일 목록을 가져옵니다.
+def get_changed_files_in_commit(repo_path, commit_hash):
+    try:
         changed_files = subprocess.check_output(
-            ['git', 'show', '--pretty=', '--name-only', latest_commit_hash], 
+            ['git', 'show', '--pretty=', '--name-only', commit_hash],
             cwd=repo_path
         ).decode('utf-8').strip().split('\n')
-    
-        # 최근 hash 값으로 git show --pretty="" --name-only {hash} 명령어를 실행하여 변경된 파일 목록을 가져옵니다.
-
-
-        print(f"Changed files: {changed_files}")
-
-        # 변경된 파일 중 JavaScript 파일을 찾습니다.
-        """ for file_path in changed_files:
-            print(f"file_path: {file_path}")
-            decoded_path = codecs.decode(file_path.strip('"'), 'unicode_escape')  # 파일 경로를 디코딩하고 따옴표를 제거합니다.
-            if decoded_path.endswith('.js'):
-                print(f"JavaScript file found: {decoded_path}")
-                return decoded_path """
-            
-        for file_path in changed_files:
-            if file_path.endswith('.js'):
-                print(f"file_path: {file_path}")
-                # 파일 경로 디코딩 처리 (필요 시)
-                decoded_path = codecs.decode(file_path.strip('"'), 'unicode_escape')
-                return decoded_path
-            
+        return [file for file in changed_files if file]
     except subprocess.CalledProcessError as e:
-        print(f"Git Command Error: {e}")
-        return None  # 오류가 발생하면 None을 반환합니다.
+        print(f"Error fetching changed files: {e}")
+        return []
+
+def get_latest_file_path(file_paths):
+    extracted_info = []
+    for file_path in file_paths:
+        parts = file_path.split(os.sep)
+        if len(parts) >= 4:
+            """ source = parts[-4]
+            level = parts[-3]
+            title = parts[-2] """
+            source = urllib.parse.unquoto(parts[-4])
+            level = urllib.parse.unquoto(parts[-3])
+            title = urllib.parse.unquoto(parts[-2])
+
+            decoded_title = title.encode('latin1').decode('utf-8')
+            transform_title = decoded_title.replace(' ', '%20')
+            url = f"{REPO_URL}/{source}/{level}/{transform_title}"
+
+            extracted_info.append({"source": source, "level": level, "title": title, "url": url})
+            print(f"get_latest_file_path file found: {extracted_info}")
+
+    return extracted_info
+
+def update_readme(repo_path, info):
+    readme_path = os.path.join(repo_path, 'README.md')
+    try:
+        with open(readme_path, 'a', encoding='utf-8') as readme_file:
+            for item in info:
+                readme_file.write(f"| '2025-01-10' | {item['source']} | {item['level']} | {item['title']} | [바로가기]({item['url']})\n")
+                print("README.md updated successfully!")
+    except Exception as e:
+        print(f"EREADME.md updated fail: {e}")
+
+def main(repo_path):
+    latest_commit_hash = get_latest_pushed_commit_hash(repo_path)
+    if not latest_commit_hash:
+        return
     
-    print("No JavaScript file found in the latest commit.")
-    return None  # js 파일이 없으면 None을 반환합니다.
+    changed_files = get_changed_files_in_commit(repo_path, latest_commit_hash)
+    if not changed_files:
+        print("No changed files in the latest commit.")
+        return
+    readme_info = get_latest_file_path(changed_files)
+    print(f"Extracted information: {readme_info}")
 
-def get_new_entry(file_path):
-    # 파일 경로에서 디렉토리만 추출
-    parts = file_path.split('/')
-    date = datetime.now().strftime('%Y-%m-%d')
-    platform = urllib.parse.unquote(parts[-4])
-    level = urllib.parse.unquote(parts[-3])
-    title = urllib.parse.unquote(parts[-2])
+    if readme_info:
+        update_readme(repo_path, readme_info)
+    else:
+        print("main : not update readme")
 
-    decoded_title = title.encode('latin1').decode('utf-8')
-    transform_title = decoded_title.replace(' ', '%20')
-
-    url = f"{REPO_URL}/{platform}/{level}/{transform_title}"
-
-    return f"| {date} | {level} | {decoded_title} | [바로가기]({url}) |"
-
-def update_readme(new_entry):
-    with open(README_PATH, 'a', encoding='utf-8') as readme_file:
-        readme_file.write(f"{new_entry}\n")
-
-# Run the function and print the result
-file_path = get_latest_file_path()
-if file_path:
-    print(f"Latest JavaScript file path: {file_path}")
-    new_entry = get_new_entry(file_path)
-    print(f"New entry: {new_entry}")
-    update_readme(new_entry)
-else:
-    print("No JavaScript file found.")
-
+main(repo_path)
 
 # 중복된 커밋 방지
 # 날짜 커밋기준 날짜

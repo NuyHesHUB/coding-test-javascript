@@ -28,19 +28,29 @@ def get_latest_file_path():
             return None
 
         # 최신 푸시된 커밋의 변경된 파일 목록을 가져옵니다.
-        changed_files = subprocess.check_output(['git', 'show', '--pretty=', '--name-only', latest_commit_hash], cwd=repo_path).decode('utf-8').strip().split('\n')
-
+        changed_files = subprocess.check_output(
+            ['git', 'show', '--pretty=', '--name-only', latest_commit_hash], 
+            cwd=repo_path
+        ).decode('utf-8').strip().split('\n')
+    
         # 최근 hash 값으로 git show --pretty="" --name-only {hash} 명령어를 실행하여 변경된 파일 목록을 가져옵니다.
 
-        
+
         print(f"Changed files: {changed_files}")
 
         # 변경된 파일 중 JavaScript 파일을 찾습니다.
-        for file_path in changed_files:
+        """ for file_path in changed_files:
             print(f"file_path: {file_path}")
             decoded_path = codecs.decode(file_path.strip('"'), 'unicode_escape')  # 파일 경로를 디코딩하고 따옴표를 제거합니다.
             if decoded_path.endswith('.js'):
                 print(f"JavaScript file found: {decoded_path}")
+                return decoded_path """
+            
+        for file_path in changed_files:
+            if file_path.endswith('.js'):
+                print(f"file_path: {file_path}")
+                # 파일 경로 디코딩 처리 (필요 시)
+                decoded_path = codecs.decode(file_path.strip('"'), 'unicode_escape')
                 return decoded_path
             
     except subprocess.CalledProcessError as e:
@@ -78,3 +88,7 @@ if file_path:
     update_readme(new_entry)
 else:
     print("No JavaScript file found.")
+
+
+# 중복된 커밋 방지
+# 날짜 커밋기준 날짜
