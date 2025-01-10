@@ -26,7 +26,7 @@ def get_latest_pushed_commit_hash(repo_path):
         print(f"Git Command Error: {e}")
         return None
 
-def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
+def get_changed_files_in_commit(repo_path, commit_hash):
     try:
         print(f"Checking commit: {commit_hash}")
 
@@ -42,7 +42,7 @@ def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
 
         print(f"Changed files: {changed_files}")
 
-        filtered_files = [file for file in changed_files if file.endswith(file_extension)]
+        filtered_files = [file for file in changed_files if file.endswith('.js')]
         print(f"Filtered files: {filtered_files}")
 
         return filtered_files
@@ -103,10 +103,11 @@ def main(repo_path):
     if not latest_commit_hash:
         return
     
-    changed_files = get_changed_files_in_commit(repo_path, latest_commit_hash, file_extension='.js')
+    changed_files = get_changed_files_in_commit(repo_path, latest_commit_hash)
     if not changed_files:
         print("No changed files in the latest commit.")
         return
+    
     readme_info = get_latest_file_path(changed_files)
     print(f"Extracted information: {readme_info}")
 
