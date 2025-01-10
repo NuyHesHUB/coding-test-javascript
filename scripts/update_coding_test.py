@@ -26,33 +26,17 @@ def get_latest_pushed_commit_hash(repo_path):
         print(f"Git Command Error: {e}")
         return None
 
-def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
-    # git diff-tree --no-commit-id --name-only -r f38510176c636dfa096bd7527697c9f52858f8ec
-
+""" def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
     try:
-        # 먼저 git status 확인
-        """ status = subprocess.run(
-            ['git', 'status'], 
-            cwd=repo_path,
-            capture_output=True,
-            text=True
-        )
-        print(f"Git status: {status.stdout}") """
         print(f"Checking commit: {commit_hash}")
 
         changed_files = subprocess.check_output(
-            # ['git', 'show', '--pretty=', '--name-only', commit_hash],
             ['git', 'diff-tree', '--no-commit-id', '--name-only', '-r', commit_hash],
-            # ['git', 'diff', '--name-only', 'HEAD~1', 'HEAD'],
             cwd=repo_path
         ).decode('utf-8').strip().split('\n')
-
-        """ if not changed_files or changed_files[0] == '':
-            print("No changes detected")
-            return [] """
         
         print(f"Changed files: {changed_files}")
-        
+
         filtered_files = [file for file in changed_files if file.endswith(file_extension)]
         print(f"Filtered files: {filtered_files}")
 
@@ -60,9 +44,39 @@ def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
     
     except subprocess.CalledProcessError as e:
         print(f"Git command failed: {e}")
-        # print(f"Error output: {e.output.decode() if hasattr(e, 'output') else 'No error output'}")
-        return []
+        return [] """
 
+def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
+    try:
+        print(f"Checking commit: {commit_hash}")
+        
+        # 바이너리 모드로 출력 받기
+        process = subprocess.Popen(
+            ['git', 'diff-tree', '--no-commit-id', '--name-only', '-r', commit_hash],
+            cwd=repo_path,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        output, error = process.communicate()
+        
+        # 디코딩 및 경로 처리
+        changed_files = output.decode('utf-8', errors='ignore').strip().split('\n')
+        print(f"Raw changed files: {changed_files}")
+        
+        # 따옴표 제거 및 .js 파일 필터링
+        filtered_files = []
+        for file in changed_files:
+            file = file.strip('"').strip("'")  # 따옴표 제거
+            if file and file.endswith(file_extension):
+                filtered_files.append(file)
+        
+        print(f"Filtered files: {filtered_files}")
+        return filtered_files
+    
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return []
+    
 def get_latest_file_path(file_paths):
     extracted_info = []
     for file_path in file_paths:
