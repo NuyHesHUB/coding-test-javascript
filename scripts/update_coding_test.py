@@ -30,6 +30,14 @@ def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
     # git diff-tree --no-commit-id --name-only -r f38510176c636dfa096bd7527697c9f52858f8ec
 
     try:
+        # 먼저 git status 확인
+        status = subprocess.run(
+            ['git', 'status'], 
+            cwd=repo_path,
+            capture_output=True,
+            text=True
+        )
+        print(f"Git status: {status.stdout}")
         changed_files = subprocess.check_output(
             ['git', 'show', '--pretty=', '--name-only', commit_hash],
             # ['git', 'diff-tree', '--no-commit-id', '--name-only', '-r', commit_hash],
