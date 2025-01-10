@@ -53,7 +53,7 @@ def get_latest_file_path(file_paths):
             transform_title = decoded_title.replace(' ', '%20')
             url = f"{REPO_URL}/{source}/{level}/{transform_title}"
 
-            extracted_info.append({"source": source, "level": level, "title": title, "url": url})
+            extracted_info.append({"source": source, "level": level, "title": decoded_title, "url": url})
             print(f"get_latest_file_path file found: {extracted_info}")
 
     return extracted_info
@@ -63,7 +63,7 @@ def update_readme(repo_path, info):
     try:
         with open(readme_path, 'a', encoding='utf-8') as readme_file:
             for item in info:
-                readme_file.write(f"| '2025-01-10' | {item['source']} | {item['level']} | {item['title']} | [바로가기]({item['url']})\n")
+                readme_file.write(f"| 2025-01-10 | {item['level']} | {item['title']} | [바로가기]({item['url']})\n")
                 print("README.md updated successfully!")
     except Exception as e:
         print(f"EREADME.md updated fail: {e}")
