@@ -77,7 +77,7 @@ def update_readme(repo_path, info):
         with open(readme_path, 'r', encoding='utf-8') as file:
             lines = file.readlines()
 
-        with open(readme_path, 'a', encoding='utf-8') as readme_file:
+        with open(readme_path, 'w', encoding='utf-8') as readme_file:
 
             readme_file.writelines(lines)
 
