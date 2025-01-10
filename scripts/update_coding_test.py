@@ -38,6 +38,7 @@ def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
             text=True
         )
         print(f"Git status: {status.stdout}") """
+        print(f"Checking commit: {commit_hash}")
 
         changed_files = subprocess.check_output(
             # ['git', 'show', '--pretty=', '--name-only', commit_hash],
@@ -50,7 +51,8 @@ def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
             print("No changes detected")
             return [] """
         
-
+        print(f"Changed files: {changed_files}")
+        
         filtered_files = [file for file in changed_files if file.endswith(file_extension)]
         print(f"Filtered files: {filtered_files}")
 
