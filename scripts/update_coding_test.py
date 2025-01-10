@@ -55,7 +55,7 @@ def get_latest_file_path(file_paths):
 
             # decoded_title = title.encode('latin1').decode('utf-8')
             decoded_title = urllib.parse.unquote(title)
-            
+
             try:
                 decoded_title = decoded_title.encode('latin1').decode('utf-8')
             except UnicodeDecodeError:
@@ -71,13 +71,21 @@ def get_latest_file_path(file_paths):
 
 def update_readme(repo_path, info):
     readme_path = os.path.join(repo_path, 'README.md')
+
     try:
+        # 1. 파일 전체 내용 읽기
+        with open(readme_path, 'r', encoding='utf-8') as file:
+            lines = file.readlines()
+
         with open(readme_path, 'a', encoding='utf-8') as readme_file:
+
+            readme_file.writelines(lines)
+
             for item in info:
-                readme_file.write(f"| 2025-01-10 | {item['level']} | {item['title']} | [바로가기]({item['url']})\n")
-                print("README.md updated successfully!")
+                readme_file.write(f"\n| 2025-01-10 | {item['level']} | {item['title']} | [바로가기]({item['url']})\n")
+                print(f"README.md updated successfully!{readme_file}")
     except Exception as e:
-        print(f"EREADME.md updated fail: {e}")
+        print(f"README.md updated fail: {e}")
 
 def main(repo_path):
     latest_commit_hash = get_latest_pushed_commit_hash(repo_path)
