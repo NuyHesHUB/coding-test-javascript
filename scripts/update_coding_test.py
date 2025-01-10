@@ -33,13 +33,13 @@ def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
         changed_files = subprocess.check_output(
             ['git', 'diff-tree', '--no-commit-id', '--name-only', '-r', commit_hash],
             cwd=repo_path,
-        ).decode('utf-8').strip()
+        ).decode('utf-8', errors='ignore').strip()
 
         # 경로에서 큰따옴표 제거
         changed_files = changed_files.replace('"', '')
         # 파일 경로가 여러 줄로 나뉘어 있으므로 split 처리
         changed_files = changed_files.split('\n')
-        
+
         print(f"Changed files: {changed_files}")
 
         filtered_files = [file for file in changed_files if file.endswith(file_extension)]
