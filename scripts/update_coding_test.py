@@ -40,8 +40,8 @@ def get_changed_files_in_commit(repo_path, commit_hash, file_extension='.js'):
         print(f"Git status: {status.stdout}")
 
         changed_files = subprocess.check_output(
-            ['git', 'show', '--pretty=', '--name-only', commit_hash],
-            # ['git', 'diff-tree', '--no-commit-id', '--name-only', '-r', commit_hash],
+            # ['git', 'show', '--pretty=', '--name-only', commit_hash],
+            ['git', 'diff-tree', '--no-commit-id', '--name-only', '-r', commit_hash],
             # ['git', 'diff', '--name-only', 'HEAD~1', 'HEAD'],
             cwd=repo_path
         ).decode('utf-8').strip().split('\n')
