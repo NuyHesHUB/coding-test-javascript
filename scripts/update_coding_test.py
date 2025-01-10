@@ -14,7 +14,6 @@ REPO_URL = 'https://github.com/NuyHesHUB/coding-test-javascript/tree/main'
 def get_latest_pushed_commit_hash(repo_path):
     try:
         latest_commit_hash = subprocess.check_output(
-            # ['git', 'log', 'origin/main', '-1', '--pretty=format:%H'], 
             ['git', 'rev-parse', 'HEAD'], 
             cwd=repo_path
         ).decode('utf-8').strip()
@@ -26,6 +25,11 @@ def get_latest_pushed_commit_hash(repo_path):
         print(f"Git Command Error: {e}")
         return None
 
+
+""" 
+$ git diff-tree --no-commit-id --name-only -r da0e76f0ee3a746256aec53e2327f5baa4175d22
+Programmers/Lv.1/20 test/20test.js
+"""
 def get_changed_files_in_commit(repo_path, commit_hash):
     try:
         print(f"Checking commit: {commit_hash}")
@@ -40,10 +44,10 @@ def get_changed_files_in_commit(repo_path, commit_hash):
         # 파일 경로가 여러 줄로 나뉘어 있으므로 split 처리
         changed_files = changed_files.split('\n')
 
-        print(f"Changed files: {changed_files}")
+        print(f"get_changed_files_in_commit : Changed files: {changed_files}")
 
         filtered_files = [file for file in changed_files if file.endswith('.js')]
-        print(f"Filtered files: {filtered_files}")
+        print(f"get_changed_files_in_commit : Filtered files: {filtered_files}")
 
         return filtered_files
     
@@ -52,9 +56,14 @@ def get_changed_files_in_commit(repo_path, commit_hash):
         return []
 
 def get_latest_file_path(file_paths):
+    print(f"file_paths: {file_paths}")
+
     extracted_info = []
+
     for file_path in file_paths:
         parts = file_path.split(os.sep)
+        print(f"parts: {parts}")
+
         if len(parts) >= 4:
             """ source = parts[-4]
             level = parts[-3]
@@ -103,12 +112,20 @@ def main(repo_path):
     if not latest_commit_hash:
         return
     
+    # 여기까지 잘나옴
+
     changed_files = get_changed_files_in_commit(repo_path, latest_commit_hash)
+
+    # print(f"repo_path:{repo_path}, latest_commit_hash:{latest_commit_hash}")
+    print(f"changed_files:{changed_files}")
+
     if not changed_files:
-        print("No changed files in the latest commit.")
+        print("main: not changed_files.")
         return
     
     readme_info = get_latest_file_path(changed_files)
+    # 여기서 부터 값이 없음
+
     print(f"Extracted information: {readme_info}")
 
     if readme_info:
@@ -120,3 +137,4 @@ main(repo_path)
 
 # 중복된 커밋 방지
 # 날짜 커밋기준 날짜
+
