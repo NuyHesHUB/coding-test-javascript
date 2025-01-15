@@ -41,10 +41,17 @@ def get_changed_files_in_commit(repo_path, commit_hash):
 
         # 경로에서 큰따옴표 제거
         changed_files = changed_files.replace('"', '')
+        # Programmers/Lv.1/\352\260\200\354\232\264\353\215\260 \352\270\200\354\236\220 \352\260\200\354\240\270\354\230\244\352\270\260/test.js
+        # txt = '\352\260\200\354\232\264\353\215\260 \352\270\200\354\236\220 \352\260\200\354\240\270\354\230\244\352\270\260'
+        txt = '\352\260\200\354\232\264\353\215\260 \352\270\200\354\236\220 \352\260\200\354\240\270\354\230\244\352\270\260'
+        test_files = urllib.parse.unquote(txt).encode('latin1').decode('utf-8')
+        # changed_files = changed_files.encode('latin1').decode('utf-8')
+        # changed_files = changed_files
         # 파일 경로가 여러 줄로 나뉘어 있으므로 split 처리
         changed_files = changed_files.split('\n')
 
-        print(f"get_changed_files_in_commit : Changed files: {changed_files}")
+        # print(f"get_changed_files_in_commit : Changed files: {changed_files[0].encode('latin1').decode('utf-8')}")
+        print(f"1111111111111get_changed_files_in_commit : Changed files: {test_files}")
 
         filtered_files = [file for file in changed_files if file.endswith('.js')]
         print(f"get_changed_files_in_commit : Filtered files: {filtered_files}")
